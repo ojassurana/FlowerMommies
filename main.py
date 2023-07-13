@@ -572,6 +572,7 @@ async def echo(request: Request):
                             text = text[12:]
                             attributes = text.split("-")
                             add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])
+                            await send_text(chat_id, "This product has been added.")
                         except:
                             await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
                     elif "/remove_product" in update.message.text:
@@ -580,6 +581,7 @@ async def echo(request: Request):
                         try:    
                             product_id = text.split(" ")[1]
                             product.delete_one({"_id": product_id})
+                            await send_text(chat_id, "This product has been removed.")
                         except:
                             await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
         elif not clients.find_one({'_id': chat_id}):

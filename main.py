@@ -165,9 +165,9 @@ def cart_summary(product_id_quantity_pairs):
         product_name = product_details['name']
         product_price = product_details['price']
         total_price += product_price * quantity
-        product_text = f"🌸{product_name} x {quantity} = ${product_price * quantity}sgd"
+        product_text = f"🌸{product_name} x {quantity} = ${round(product_price * quantity, 2)}sgd"
         total_text += product_text + "\n"
-    total_text += f"💲Total Checkout Price: ${total_price}sgd" + "\n"
+    total_text += f"💲Total Checkout Price: ${round(total_price, 2)}sgd" + "\n"
     return total_text
 
 
@@ -233,11 +233,11 @@ async def register_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 1 and update.message.contact != None:
         await update_info_payload_client(chat_id, "phone_number", update.message.contact.phone_number)
         await update_state_client(chat_id, 3, 2)
-        await bot.send_message(chat_id=update.message.chat_id, text="We kindly request you to provide your name. It will help us address you properly and provide a more personalized experience. 😊", reply_markup=ReplyKeyboardRemove())
+        await bot.send_message(chat_id=update.message.chat_id, text="<b>We kindly request you to provide your name.</b>\nIt will help us address you properly and provide a more personalized experience. 😊", reply_markup=ReplyKeyboardRemove())
     elif client_status['state']['minor'] == 2 and update.message and update.message.text:
         await update_info_payload_client(chat_id, "name", update.message.text)
         await update_state_client(chat_id, 3, 3)
-        await send_text(chat_id, " Please provide us with your email address. This will allow us to communicate with you effectively and keep you updated. Thank you! 📧")
+        await send_text(chat_id, "<b>Please provide us with your email address.</b>\nThis will allow us to communicate with you effectively and keep you updated. Thank you! 📧")
     elif client_status['state']['minor'] == 3 and update.message and update.message.text:
         text = update.message.text
         await update_info_payload_client(chat_id, "email", text)
@@ -599,7 +599,7 @@ async def echo(request: Request):
                     if "/start" == update.message.text :
                         await send_text(chat_id, msg1)
                     elif "/cancel" == update.message.text:
-                        await send_text(chat_id, "Your current procedure has been cancelled.")
+                        await send_text(chat_id, "Your current procedure has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                         await update_state_client(chat_id, 0, 0)
                         await info_payload_reset_client(chat_id)
                         return {"status": "ok"}
@@ -642,7 +642,7 @@ async def echo(request: Request):
                             await send_text(chat_id, "Please register first by using /register command before making a purchase. 😀")
                         else:
                             await bot.send_photo(chat_id=chat_id, photo="https://cdn.discordapp.com/attachments/628770208319930398/1124613491047792670/IMG_20230701_155627_608.jpg", caption="")
-                            await send_text(chat_id, "Certainly! Please take a moment to browse through our catalog. Once you find the product you'd like to purchase, please enter the corresponding ID. Feel free to ask for any assistance or further information about a specific product. Happy shopping! 🛍️🌸")
+                            await send_text(chat_id, "Certainly! Please take a moment to browse through our catalog. <b>Once you find the product you'd like to purchase, please enter the corresponding ID (e.g A2).</b>\nFeel free to ask for any assistance or further information about a specific product. Happy shopping! 🛍️🌸")
                             await update_state_client(chat_id, 1, 0)
                             
                     elif "/register" == update.message.text:
@@ -656,14 +656,14 @@ async def echo(request: Request):
                     await send_text(chat_id, "Please enter a valid input.")
             elif client_status['state']['major'] == 3:
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "Your current procedure has been cancelled.")
+                    await send_text(chat_id, "Your current procedure has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                     await update_state_client(chat_id, 0, 0)
                     await info_payload_reset_client(chat_id)
                     return {"status": "ok"}
                 await register_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 1:
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "Your current procedure has been cancelled.")
+                    await send_text(chat_id, "Your current procedure has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                     await update_state_client(chat_id, 0, 0)
                     await info_payload_reset_client(chat_id)
                     return {"status": "ok"}

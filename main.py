@@ -567,12 +567,16 @@ async def echo(request: Request):
                             product.update_one({"_id": product_id}, {"$set": {"status": False}})
                             await send_text(chat_id, "The product has been marked as out of stock.")
                     elif "/add_product" in update.message.text:
+                        product = users['product']
                         text = update.message.text
                         try:    
                             text = text[13:]
                             attributes = text.split("-")
-                            add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])
-                            await send_text(chat_id, "This product has been added.")
+                            if len(product.find_one({"_id": attributes[0]})) == 1:
+                                await send_text(chat_id, "This product fucking exist.")
+                            else:
+                                add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])
+                                await send_text(chat_id, "This product has been added.")
                         except:
                             await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
                     elif "/remove_product" in update.message.text:

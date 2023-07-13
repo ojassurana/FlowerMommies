@@ -626,8 +626,8 @@ async def echo(request: Request):
                                 order_products = order_status['products']
                                 product_text = ""
                                 for product_info in order_products:
-                                    name = product.find_one({"_id": product_info['id']})
-                                    product_text += f"----------------\nProduct Name: {name}\nQuantity: {product_info['quantity']}\n----------------"
+                                    name = product.find_one({"_id": product_info['id']})["name"]
+                                    product_text += f"--\nProduct Name: {name}\nQuantity: {product_info['quantity']}\n--"
                                 order_time = order_status['time']
                                 order_address = order_status['address']
                                 order_status_bool = order_status['status']

@@ -618,6 +618,7 @@ async def echo(request: Request):
                             await send_text(chat_id, "You haven't placed any orders yet. Kindly use /purchase to make your first order.")
                         else:
                             total_text = ""
+                            order = users['order']
                             for order_detail in client_status['order_history']:
                                 order_status = order.find_one({"_id": order_detail}) 
                                 order_id = order_detail

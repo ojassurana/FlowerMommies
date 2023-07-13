@@ -171,7 +171,7 @@ def cart_summary(product_id_quantity_pairs):
     return total_text
 
 
-def add_product(id, name, description, price, dimensions, status):
+def add_product(id, name, description, price, dimensions, status=True):
     new_product = {
         "_id": id,
         "name": name,
@@ -566,6 +566,21 @@ async def echo(request: Request):
                         else:
                             product.update_one({"_id": product_id}, {"$set": {"status": False}})
                             await send_text(chat_id, "The product has been marked as out of stock.")
+                    elif "/add_product" in update.message.text:
+                        text = update.message.text
+                        try:    
+                            text = text[12:]
+                            attributes = text.split("-")
+                            add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])
+                        except:
+                            await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
+                    elif "/remove_product" in update.message.text:
+                        text = update.message.text
+                        try:    
+                            product_id = text.split(" ")[1]
+                            product.delete_one{"_id": product_id}
+                        except:
+                            await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
         elif not clients.find_one({'_id': chat_id}):
             first_char = str(random.randint(0, 9))
             second_char = random.choice(string.ascii_uppercase)

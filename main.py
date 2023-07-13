@@ -578,7 +578,7 @@ async def echo(request: Request):
                         text = update.message.text
                         try:    
                             product_id = text.split(" ")[1]
-                            product.delete_one{"_id": product_id}
+                            product.delete_one({"_id": product_id})
                         except:
                             await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
         elif not clients.find_one({'_id': chat_id}):

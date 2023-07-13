@@ -644,7 +644,7 @@ async def echo(request: Request):
 <b>Order Comment:</> {order_comment}
 <b>Order Refund status:</b> {order_refunded}
                                 '''
-                            total_text += order_text + "----------------------------------------"+ "\n"
+                                total_text += order_text + "----------------------------------------"+ "\n"
                             await send_text(chat_id, total_text)
                     elif "/purchase" == update.message.text:
                         if client_status['phone_number'] == "":

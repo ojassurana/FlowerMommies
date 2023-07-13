@@ -51,8 +51,6 @@ msg1 = '''
 
 /Catalog: Dive into a world of colors and fragrances! Browse our catalog to find the stunning flower arrangements that will take your breath away. 🌸🌷✨
 
-/contact: Need assistance or have any questions? Reach out to us through our phone number or Telegram account. We're just a message away! 📞✉️🤗
-
 /order_history: Keep track of your previous purchases and deliveries. It's a great way to relive the beautiful moments and plan future surprises! 📚💐💌
 
 🌼 So, let's dive into the enchanting world of flowers together! Start exploring our collection and let us help you create moments that bloom forever! 🌷💖🌼
@@ -405,7 +403,7 @@ async def purchase_handler(chat_id, client_status, update):
             order.insert_one(order_payload)
             await info_payload_reset_client(chat_id)
             clients.update_one({"_id": chat_id}, {"$push": {"order_history": order_id}})
-            await update_state_client(chat_id, 2, 0)
+            await update_state_client(chat_id, 2, 0)        
         elif text == "No ❌":
             await info_payload_reset_client(chat_id)
             await update_state_client(chat_id, 0, 0)
@@ -674,9 +672,9 @@ async def echo(request: Request):
                 await purchase_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 2:
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "If you wish to cancel your current order, please press /delete_order.")
+                    await send_text(chat_id, "If you wish to cancel your current order, please press /cancel_order.")
                     return {"status": "ok"}
-                elif update.message and update.message.text == "/delete_order":
+                elif update.message and update.message.text == "/cancel_order":
                     order_history = client_status['order_history']
                     order = users['order']
                     for order_id in order_history:
@@ -698,8 +696,8 @@ async def echo(request: Request):
                         order_payload = order.find_one({"_id": order_id})
                         if order_payload['paid'] == False:
                             stripe_payment_link = order_payload['stripe_payment_link']
-                            await send_text(chat_id, f"Please pay for your order at the following url: <a href='"+stripe_payment_link+"'>Click Here</a>")
-                            await send_text(chat_id, "If you wish to cancel your current order, please contact, please press the command /delete_order.")
+                            await send_text(chat_id, f"Thank you for choosing our flower boutique! To complete your order, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
+                            await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                             return {"status": "ok"}
         return {"status": "ok"}
     except Exception as e:

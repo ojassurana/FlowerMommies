@@ -41,8 +41,23 @@ app.add_middleware(
 )
 # Text: ______________________________________________________________________________________________________________
 msg1 = '''
-Hello! Welcome to Flower Mommies.
-We are a flower delivery service that delivers flowers to your doorstep.
+🌺 Welcome to our Flower Business Bot for Singapore! 🌸 
+
+🌼 We're here to help you explore the vibrant world of flowers and bring the beauty of nature to your doorstep. 🌿✨✉️💐 Our bot is your go-to assistant for all things floral. From exploring our mesmerizing collection to placing orders, we've got you covered! 🌹💐 
+
+/register: Create an account and unlock access to our exciting features and benefits. 🌟🌸
+
+/purchase: Ready to delight your loved ones? Make their day by selecting and ordering the perfect flower arrangement. 🛍🌺
+
+/Catalog: Dive into a world of colors and fragrances! Browse our catalog to find the stunning flower arrangements that will take your breath away. 🌸🌷✨
+
+/contact: Need assistance or have any questions? Reach out to us through our phone number or Telegram account. We're just a message away! 📞✉️🤗
+
+/order_history: Keep track of your previous purchases and deliveries. It's a great way to relive the beautiful moments and plan future surprises! 📚💐💌
+
+🌼 So, let's dive into the enchanting world of flowers together! Start exploring our collection and let us help you create moments that bloom forever! 🌷💖🌼
+
+If you have any questions or need assistance, don't hesitate to reach out using the /contact command. Happy shopping! 🌸✨🛍
 '''
 msg7 = '''
 We have a wide variety of flowers to choose from. Please note the ID of the flower you want to orderl and use /purchase to buy it.

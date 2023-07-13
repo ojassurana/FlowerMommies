@@ -569,7 +569,7 @@ async def echo(request: Request):
                     elif "/add_product" in update.message.text:
                         text = update.message.text
                         try:    
-                            text = text[12:]
+                            text = text[13:]
                             attributes = text.split("-")
                             add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])
                             await send_text(chat_id, "This product has been added.")

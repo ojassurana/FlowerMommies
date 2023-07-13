@@ -572,7 +572,7 @@ async def echo(request: Request):
                         try:    
                             text = text[13:]
                             attributes = text.split("-")
-                            if len(product.find_one({"_id": attributes[0]})) == 1:
+                            if len(product.find_one({"_id": attributes[0]})) != None:
                                 await send_text(chat_id, "This product fucking exist.")
                             else:
                                 add_product(attributes[0], attributes[1], attributes[2], float(attributes[3]), attributes[4])

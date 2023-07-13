@@ -619,23 +619,30 @@ async def echo(request: Request):
                         else:
                             total_text = ""
                             order = users['order']
+                            product = users['product']
                             for order_detail in client_status['order_history']:
                                 order_status = order.find_one({"_id": order_detail}) 
                                 order_id = order_detail
                                 order_products = order_status['products']
+                                product_text = ""
+                                for product_info in order_products:
+                                    name = product.find_one({"_id": product_info['name']})
+                                    product_text += f"----------------\nProduct Name: {name}\nQuantity: {product_info['quantity']}\n----------------"
                                 order_time = order_status['time']
                                 order_address = order_status['address']
                                 order_status_bool = order_status['status']
                                 order_comment = order_status['comment']
                                 order_refunded = order_status['refunded']
+                                order_cost = order_status['cost']
                                 order_text =  f'''
-                                Order ID: {order_id}
-                                Products: {order_products}
-                                Order Time: {order_time}
-                                Order Address: {order_address}
-                                Order Status: {order_status_bool}
-                                Order Comment: {order_comment}
-                                Order Refunded: {order_refunded}
+<b>Order ID:</b> {order_id}
+<b>Order time:</b> {order_time}
+<b>Products:</b>\n{product_text}
+<b>Order cost:</b>: ${order_cost}
+<b>Order Address:</b> {order_address}
+<b>Delivery Status:</b> {order_status_bool}
+<b>Order Comment:</> {order_comment}
+<b>Order Refund status:</b> {order_refunded}
                                 '''
                             total_text += order_text + "----------------------------------------"+ "\n"
                             await send_text(chat_id, total_text)

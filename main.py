@@ -580,7 +580,7 @@ async def echo(request: Request):
                         text = update.message.text
                         try:    
                             product_id = text.split(" ")[1]
-                            if len(product.find_one({"_id": product_id})) == 0:
+                            if product.count_documents({"_id": product_id}) == 0:
                                 await send_text(chat_id, "This product doesn't fucking exist.")
                             else:
                                 product.delete_one({"_id": product_id})

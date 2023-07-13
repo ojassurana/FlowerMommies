@@ -663,7 +663,7 @@ async def echo(request: Request):
                 await register_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 1:
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "Your current procedure has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
+                    await send_text(chat_id, "Your current order has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                     await update_state_client(chat_id, 0, 0)
                     await info_payload_reset_client(chat_id)
                     return {"status": "ok"}

@@ -575,13 +575,13 @@ async def echo(request: Request):
                         except:
                             await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
                     elif "/remove_product" in update.message.text:
+                        product = users['product']
                         text = update.message.text
-                        #try:    
-                        product_id = text.split(" ")[1]
-                        print(product_id)
-                        product.delete_one({"_id": product_id})
-            
-                            #await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
+                        try:    
+                            product_id = text.split(" ")[1]
+                            product.delete_one({"_id": product_id})
+                        except:
+                            await send_text(chat_id, "There is something fucked about about your formatting, please retry.")
         elif not clients.find_one({'_id': chat_id}):
             first_char = str(random.randint(0, 9))
             second_char = random.choice(string.ascii_uppercase)

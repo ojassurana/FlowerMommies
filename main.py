@@ -633,7 +633,7 @@ async def echo(request: Request):
                                 order_status_bool = order_status['status']
                                 order_comment = order_status['comment']
                                 order_refunded = order_status['refunded']
-                                order_cost = order_status['cost']
+                                order_cost = order_status['amount']
                                 order_text =  f'''
 <b>Order ID:</b> {order_id}
 <b>Order time:</b> {order_time}

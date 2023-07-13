@@ -156,7 +156,6 @@ async def send_options_buttons(chat_id, text, options):
 
 
 def cart_summary(product_id_quantity_pairs):
-    # extract the price, name and quantity of each product
     total_price = 0
     total_text = ""
     for pair in product_id_quantity_pairs:
@@ -166,9 +165,9 @@ def cart_summary(product_id_quantity_pairs):
         product_name = product_details['name']
         product_price = product_details['price']
         total_price += product_price * quantity
-        product_text = f"{product_name} x {quantity} = {product_price * quantity}"
+        product_text = f"🌸{product_name} x {quantity} = ${product_price * quantity}sgd"
         total_text += product_text + "\n"
-    total_text += f"Total Checkout Price: {total_price}" + "\n"
+    total_text += f"💲Total Checkout Price: ${total_price}sgd" + "\n"
     return total_text
 
 
@@ -234,11 +233,11 @@ async def register_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 1 and update.message.contact != None:
         await update_info_payload_client(chat_id, "phone_number", update.message.contact.phone_number)
         await update_state_client(chat_id, 3, 2)
-        await bot.send_message(chat_id=update.message.chat_id, text="Please enter your name?", reply_markup=ReplyKeyboardRemove())
+        await bot.send_message(chat_id=update.message.chat_id, text="We kindly request you to provide your name. It will help us address you properly and provide a more personalized experience. 😊", reply_markup=ReplyKeyboardRemove())
     elif client_status['state']['minor'] == 2 and update.message and update.message.text:
         await update_info_payload_client(chat_id, "name", update.message.text)
         await update_state_client(chat_id, 3, 3)
-        await send_text(chat_id, "Please enter your email address?")
+        await send_text(chat_id, " Please provide us with your email address. This will allow us to communicate with you effectively and keep you updated. Thank you! 📧")
     elif client_status['state']['minor'] == 3 and update.message and update.message.text:
         text = update.message.text
         await update_info_payload_client(chat_id, "email", text)
@@ -246,7 +245,7 @@ async def register_handler(chat_id, client_status, update):
         await update_client_info_from_payload(chat_id, info_payload)
         await info_payload_reset_client(chat_id)
         await update_state_client(client_status['_id'], 0, 0)
-        await send_text(chat_id, "You have been registered successfully. You can now use /purchase to make your order ;)\nYou may use /register again if any of the details you entered are incorrect.")
+        await send_text(chat_id, "Congratulations! 🎉 You have been successfully registered. Now, you can use the command /purchase to proceed with placing your order. In case any of the details you entered are incorrect, feel free to use the command /register again to update them. We're here to ensure your information is accurate and provide you with a seamless experience! 😉")
         send_appscript_request({"method": "register", "random_id": client_status["random_id"], "phone_number": info_payload['phone_number'], "email": text, "name": info_payload['name'], "chat_id": chat_id})
     else:
         await send_text(chat_id, "Please enter a valid input. If you want to restart, use /cancel and then press /register again.")
@@ -256,7 +255,7 @@ async def purchase_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 0 and update.message and update.message.text:
         id = update.message.text
         if product.count_documents({"_id": id}) == 0:
-            await send_text(chat_id, "Your product ID doesn't exist. Kindly re-enter another product ID.")
+            await send_text(chat_id, " It seems that the product ID you entered does not exist. Please double-check the ID and try again with a valid product ID from our catalog. If you need any assistance in finding the correct product or have any other questions, feel free to ask /contact. We're here to help! 🌼")
             return {"status": "ok"}
         if product.find_one({"_id": id})['status'] == False:
             await send_text(chat_id, "The product you have chosen is currently out of stock. Please choose another product ID instead.")
@@ -264,8 +263,8 @@ async def purchase_handler(chat_id, client_status, update):
         info_payload = client_status['info_payload']
         for key in info_payload:
             if key == id:
-                await send_text(chat_id, "You have already added this product to your cart. Please add another product ID instead")
-                await send_text(chat_id, "If you wish to cancel the current order, use /cancel.")
+                await send_text(chat_id, "Oops! It looks like you have already added that product to your cart. Please provide a different product ID for adding another item. If you need any assistance or have any questions, feel free to ask. Happy shopping! 🛍️😊")
+                await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel. ❌ If you have any further questions or need assistance, feel free to let me know. I'm here to help! 😊")
                 return {"status": "ok"}
         await update_info_payload_client(chat_id, id, 0)
         await update_state_client(chat_id, 1, 1)
@@ -275,16 +274,15 @@ async def purchase_handler(chat_id, client_status, update):
         product_price = product_details['price']
         product_dimensions = product_details['dimensions']
         await send_text(chat_id, f'''
-        You have chosen this flower 🌻
-        <b>Product ID:</b> {id}
-        <b>Name:</b> {product_name}
-        <b>Description:</b> {product_description}
-        <b>Price:</b> {product_price}
-        <b>Dimensions:</b> {product_dimensions}
+Great choice! 🌻 Here are the details of the flower you have selected:
+<b>Product ID:</b> {id}
+<b>Name:</b> {product_name}
+<b>Description:</b> {product_description}
+<b>Price:</b> ${product_price} sgd
+<b>Dimensions:</b> {product_dimensions}
 
-        Please enter the quantity of the product you want to purchase. (e.g. 2)
-        ''')
-        await send_text(chat_id, "If you wish to cancel the current order, use /cancel.")
+Please enter the quantity of the product you would like to purchase (e.g 2) and I'll proceed with your order 🛍️✨. If, at any point, you wish to cancel the current order, you can use the command /cancel. 
+''')
     elif client_status['state']['minor'] == 1 and update.message and update.message.text:
         quantity = update.message.text
         if not quantity.isdigit() or int(quantity) < 1 or int(quantity) > 1000:
@@ -303,9 +301,9 @@ async def purchase_handler(chat_id, client_status, update):
                 product_id_quantity_pairs.append([key, info_payload[key]])
         cart_text = cart_summary(product_id_quantity_pairs)
         await send_text(chat_id, cart_text)
-        await send_options_buttons(client_status['_id'], "Do you wish to add more items in your cart or checkout?",["Checkout 🛒", "Add more 🏵"])
+        await send_options_buttons(client_status['_id'], "Would you like to add more items to your cart or proceed to checkout? 🛒",["Checkout 🛒", "Add more 🏵"])
         await update_state_client(chat_id, 1, 2)
-        await send_text(chat_id, "If you wish to cancel the current order, use /cancel.")
+        await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel. Let me know how you would like to proceed. 😊")
     elif client_status['state']['minor'] == 2 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
         if text == "Checkout 🛒":
@@ -320,26 +318,26 @@ async def purchase_handler(chat_id, client_status, update):
                     product_id_quantity_pairs.append([key, info_payload[key]])
             cart_text = cart_summary(product_id_quantity_pairs)
             await send_text(chat_id, cart_text)
-            await send_options_buttons(client_status['_id'], "Do you wish to checkout your order summary?",["Yes ✅", "No ❌"])
+            await send_options_buttons(client_status['_id'], "Would you like to proceed to checkout and review your order summary? 🛒✨",["Yes ✅", "No ❌"])
             await update_state_client(chat_id, 1, 3)
         elif text == "Add more 🏵":
-            await send_text(chat_id, "Look at the catalog again :) Please enter the ID of the product you want to purchase.")
+            await send_text(chat_id, "Absolutely! Let's dive into our catalog once again! 🌸✨ Please take a look and find the product that catches your eye. Once you've made your choice, simply enter the corresponding ID! 🛍️😊")
             await update_state_client(chat_id, 1, 0)
         else:
             await send_text(chat_id, "Please enter a valid input. If you want to restart the purchase, use /cancel and then press /purchase again.")
     elif client_status['state']['minor'] == 3 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
         if text == "Yes ✅":
-            await send_text(chat_id, "Please enter your order delivery address.")
+            await send_text(chat_id, "Sure! Please provide your order delivery address so we can ensure your flowers reach the right destination. 🚚🌸")
             await update_state_client(chat_id, 1, 4)
         elif text == "No ❌":
             await info_payload_reset_client(chat_id)
             await update_state_client(chat_id, 0, 0)
-            await send_text(chat_id, "Your current order has been cancelled. Use /purchase to make any new orders.")
+            await send_text(chat_id, "Order successfully cancelled! 🎉 If you have any more questions or need further assistance, don't hesitate to ask. Simply use the command /contact and our team will be ready to help you! 🌼")
     elif client_status['state']['minor'] == 4 and update.message and update.message.text:
         address = update.message.text
         await update_info_payload_client(chat_id, "address", address)
-        await send_text(chat_id, "Please enter any comments you have for your order.")
+        await send_text(chat_id, "Please feel free to enter any comments or special instructions you have for your order. We want to make sure we meet your preferences and requirements. 📝✨")
         await update_state_client(chat_id, 1, 5)
     elif client_status['state']['minor'] == 5 and update.message and update.message.text:
         comment = update.message.text
@@ -352,9 +350,9 @@ async def purchase_handler(chat_id, client_status, update):
                 product_id_quantity_pairs.append([key, info_payload[key]])
         cart_text = cart_summary(product_id_quantity_pairs)
         await send_text(chat_id, cart_text)
-        await send_text(chat_id, f"Your order will be delivered to: {info_payload['address']}")
+        await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: {info_payload['address']}\n If you have any additional comments or questions, please let us know. We're here to assist you! 🚚🌸")
         await send_text(chat_id, f"Your comment for the order is: {comment}")
-        await send_options_buttons(client_status['_id'], "Do you wish to confirm your order?",["Yes ✅", "No ❌"])
+        await send_options_buttons(client_status['_id'], "Are you ready to confirm your order? 😊🛍️\nPlease let me know if you're all set to proceed with your purchase. ✅",["Yes ✅", "No ❌"])
         await update_state_client(chat_id, 1, 6)
     elif client_status['state']['minor'] == 6 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
@@ -407,7 +405,7 @@ async def purchase_handler(chat_id, client_status, update):
         elif text == "No ❌":
             await info_payload_reset_client(chat_id)
             await update_state_client(chat_id, 0, 0)
-            await send_text(chat_id, "Your current order has been cancelled. Use /purchase to make any new orders.")
+            await send_text(chat_id, "Order successfully cancelled! 🎉 If you have any more questions or need further assistance, don't hesitate to ask. Simply use the command /contact and our team will be ready to help you! 🌼")
     else:
         await send_text(chat_id, "Please enter a valid input. If you want to restart the purchase, use /cancel and then press /purchase again.")
 
@@ -609,7 +607,7 @@ async def echo(request: Request):
                         help_msg = "Please contact @ojasx for customer support/suggestions."
                         await send_text(chat_id, help_msg)
                     elif "/referral" == update.message.text:
-                        referal_message = f"Your referal code is: {client_status['random_id']}."
+                        referal_message = f"Your referal code is: {client_status['random_id']}. 🎉 Feel free to share this code with your friends and family to enjoy special discounts and benefits when they make a purchase. Thank you for being part of our community! ✨🌼✨ Please contact @ojasx for customer support/suggestions."
                         await send_text(chat_id, referal_message)
                     elif "/catalog" == update.message.text:
                         await bot.send_photo(chat_id=chat_id, photo="https://cdn.discordapp.com/attachments/628770208319930398/1124613491047792670/IMG_20230701_155627_608.jpg", caption=msg7)
@@ -644,16 +642,16 @@ async def echo(request: Request):
                             await send_text(chat_id, "Please register first by using /register command before making a purchase. 😀")
                         else:
                             await bot.send_photo(chat_id=chat_id, photo="https://cdn.discordapp.com/attachments/628770208319930398/1124613491047792670/IMG_20230701_155627_608.jpg", caption="")
-                            await send_text(chat_id, "Look at the catalog. Please enter the ID of the product you want to purchase.")
+                            await send_text(chat_id, "Certainly! Please take a moment to browse through our catalog. Once you find the product you'd like to purchase, please enter the corresponding ID. Feel free to ask for any assistance or further information about a specific product. Happy shopping! 🛍️🌸")
                             await update_state_client(chat_id, 1, 0)
                             
                     elif "/register" == update.message.text:
                         await update_state_client(chat_id, 3, 1)
                         reply_keyboard = [[KeyboardButton("Share Phone Number 📞", request_contact=True)]]
                         markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-                        await bot.send_message(chat_id, text="Click the button below to share your 📞 contact details\nThis is so that we can contact you if there are any issues.", reply_markup=markup)
+                        await bot.send_message(chat_id, text="Please click the button below to share your 📞 contact details.\nThis will enable us to reach out to you promptly in case of any issues or updates. 📲", reply_markup=markup)
                     else:
-                        await send_text(chat_id, "I am not sure what you mean 😅. Please use the availible command in the menu section to interact with me. Or /contact support for help.")
+                        await send_text(chat_id, "I am not sure what you mean 😅. Please check the menu section for available commands and interactions. If you need further assistance, simply use the command /contact support to reach our customer support team. They're here to help you! 📞")
                 else:
                     await send_text(chat_id, "Please enter a valid input.")
             elif client_status['state']['major'] == 3:
@@ -672,7 +670,7 @@ async def echo(request: Request):
                 await purchase_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 2:
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "If you wish to cancel your current order, please press /cancel_order.")
+                    await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                     return {"status": "ok"}
                 elif update.message and update.message.text == "/cancel_order":
                     order_history = client_status['order_history']
@@ -696,7 +694,7 @@ async def echo(request: Request):
                         order_payload = order.find_one({"_id": order_id})
                         if order_payload['paid'] == False:
                             stripe_payment_link = order_payload['stripe_payment_link']
-                            await send_text(chat_id, f"Thank you for choosing our flower boutique! To complete your order, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
+                            await send_text(chat_id, f"Congratulations! 🎉 Your order has been placed successfully! To confirm your order, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
                             await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                             return {"status": "ok"}
         return {"status": "ok"}

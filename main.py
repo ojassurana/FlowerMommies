@@ -242,7 +242,7 @@ async def register_handler(chat_id, client_status, update):
         await update_client_info_from_payload(chat_id, info_payload)
         await info_payload_reset_client(chat_id)
         await update_state_client(client_status['_id'], 0, 0)
-        await send_text(chat_id, "Congratulations! 🎉 You have been successfully registered\n\nNow, you can use the command /purchase to <b>proceed with placing your order.</b>\n\nIn case any of the details you entered are incorrect, use the command /register again to update them. 😁")
+        await send_text(chat_id, "Congratulations! 🎉 You have been successfully registered\n\nUse the command /purchase to <b>proceed with placing your order.</b>\n\nIn case you entered are <b>incorrect details</b>, use the command /register again to update them.")
         send_appscript_request({"method": "register", "random_id": client_status["random_id"], "phone_number": info_payload['phone_number'], "email": text, "name": info_payload['name'], "chat_id": chat_id})
     else:
         await send_text(chat_id, "Please enter a valid input. If you want to restart, use /cancel and then press /register again.")
@@ -252,7 +252,7 @@ async def purchase_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 0 and update.message and update.message.text:
         id = update.message.text
         if product.count_documents({"_id": id}) == 0:
-            await send_text(chat_id, " It seems that the product ID you entered does not exist. Please double-check the ID and try again with a valid product ID from our catalog. If you need any assistance in finding the correct product or have any other questions, feel free to ask /contact. We're here to help! 🌼")
+            await send_text(chat_id, "It seems that the product ID you <b>entered does not exist</b>\nPlease double-check the ID and try again with a <b>valid product ID from our catalog.</b>")
             return {"status": "ok"}
         if product.find_one({"_id": id})['status'] == False:
             await send_text(chat_id, "The product you have chosen is currently out of stock. Please choose another product ID instead.")
@@ -271,16 +271,16 @@ async def purchase_handler(chat_id, client_status, update):
         product_price = product_details['price']
         product_dimensions = product_details['dimensions']
         await send_text(chat_id, f'''
-Great choice! 🌻 Here are the details of the flower you have selected:
+Great choice! 🌻 Here are the details of the item(s) you have selected:
 <b>Product ID:</b> {id}
 <b>Name:</b> {product_name}
 <b>Description:</b> {product_description}
 <b>Price:</b> ${product_price} sgd
 <b>Dimensions:</b> {product_dimensions}
 
-Please enter the quantity of the product you would like to purchase (e.g 2) and I'll proceed with your order 🛍✨. 
+Please <b>enter the quantity</b> of the product you would like to purchase (e.g 2) 🛍✨. 
 
-If, at any point, you wish to cancel the current order, you can use the command /cancel.
+If you wish to cancel the current order, use the command /cancel.
 ''')
     elif client_status['state']['minor'] == 1 and update.message and update.message.text:
         quantity = update.message.text
@@ -360,7 +360,7 @@ If, at any point, you wish to cancel the current order, you can use the command 
                         product_id_quantity_pairs.append([key, info_payload[key]])
                 cart_text = cart_summary(product_id_quantity_pairs)
                 await send_text(chat_id, cart_text)
-                await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: <b>{info_payload['address']}</b> on \n<b>{new_date_string}</b>\nIf you have any additional comments or questions, please use /contact. We're here to assist you! 🚚🌸")
+                await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: <b>{info_payload['address']}</b> on \n<b>{new_date_string}</b>\n\nIf you have any additional comments or questions, please use /contact. We're here to assist you! 🚚🌸")
                 await send_text(chat_id, f"Your comment for the order is: {info_payload['comment']}")
                 await send_options_buttons(client_status['_id'], "Are you ready to confirm your order? 😊🛍️\nPlease let me know if you're all set to proceed with your purchase. ✅",["Yes ✅", "No ❌"])
                 await update_state_client(chat_id, 1, 6)

@@ -278,7 +278,9 @@ Great choice! 🌻 Here are the details of the flower you have selected:
 <b>Price:</b> ${product_price} sgd
 <b>Dimensions:</b> {product_dimensions}
 
-Please enter the quantity of the product you would like to purchase (e.g 2) and I'll proceed with your order 🛍️✨. If, at any point, you wish to cancel the current order, you can use the command /cancel. 
+Please enter the quantity of the product you would like to purchase (e.g 2) and I'll proceed with your order 🛍✨. 
+
+If, at any point, you wish to cancel the current order, you can use the command /cancel.
 ''')
     elif client_status['state']['minor'] == 1 and update.message and update.message.text:
         quantity = update.message.text
@@ -339,18 +341,32 @@ Please enter the quantity of the product you would like to purchase (e.g 2) and 
     elif client_status['state']['minor'] == 5 and update.message and update.message.text:
         comment = update.message.text
         await update_info_payload_client(chat_id, "comment", comment)
-        # Print the order summary
-        info_payload = client_status['info_payload']
-        product_id_quantity_pairs = []
-        for key in info_payload:
-            if key not in ["address", "comment"]:
-                product_id_quantity_pairs.append([key, info_payload[key]])
-        cart_text = cart_summary(product_id_quantity_pairs)
-        await send_text(chat_id, cart_text)
-        await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: {info_payload['address']}\nIf you have any additional comments or questions, please use /contact. We're here to assist you! 🚚🌸")
-        await send_text(chat_id, f"Your comment for the order is: {comment}")
-        await send_options_buttons(client_status['_id'], "Are you ready to confirm your order? 😊🛍️\nPlease let me know if you're all set to proceed with your purchase. ✅",["Yes ✅", "No ❌"])
-        await update_state_client(chat_id, 1, 6)
+        await send_text(chat_id, "What is your preferred date of delivery in this format: DD/MM/YYYY (e.g. 20/11/2023)?")
+        await update_state_client(chat_id, 1, 7)
+    elif client_status['state']['minor'] == 7 and update.message and update.message.text:
+        delivery_date = update.message.text
+        try:
+            delivery_date = datetime.strptime(delivery_date, '%d/%m/%Y')
+            today = datetime.now()
+            if delivery_date < today + timedelta(days=1) or delivery_date > today + timedelta(days=90):
+                await send_text(chat_id, "Please enter a date that is between tomorrow and 90 days from now.")
+            else:
+                await update_info_payload_client(chat_id, "delivery_date", delivery_date)
+                info_payload = client_status['info_payload']
+                product_id_quantity_pairs = []
+                for key in info_payload:
+                    if key not in ["address", "comment", "delivery_date"]:
+                        product_id_quantity_pairs.append([key, info_payload[key]])
+                cart_text = cart_summary(product_id_quantity_pairs)
+                await send_text(chat_id, cart_text)
+                await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: {info_payload['address']} on {info_payload['delivery_date']}\nIf you have any additional comments or questions, please use /contact. We're here to assist you! 🚚🌸")
+                await send_text(chat_id, f"Your comment for the order is: {comment}")
+                await send_options_buttons(client_status['_id'], "Are you ready to confirm your order? 😊🛍️\nPlease let me know if you're all set to proceed with your purchase. ✅",["Yes ✅", "No ❌"])
+                await update_state_client(chat_id, 1, 6)
+        except ValueError:
+            await send_text(chat_id, "Please enter the date in the correct format: DD/MM/YYYY.")
+        except Exception as e:
+            await send_text(chat_id, f"An error occurred: {e}")
     elif client_status['state']['minor'] == 6 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
         if text == "Yes ✅":
@@ -394,6 +410,7 @@ Please enter the quantity of the product you would like to purchase (e.g 2) and 
             order_payload['stripe_payment_link'] = stripe_payment_url
             order_payload['stripe_payment_id'] = stripe_payment_id
             order_payload['checkout_id'] = checkout_id
+            order_payload['delivery_date'] = delivery_date
             await send_text(chat_id, f"Your order has been placed successfully. Please pay ${total_price} at the following url: <a href='"+stripe_payment_url+"'>Click Here</a>")
             order.insert_one(order_payload)
             await info_payload_reset_client(chat_id)

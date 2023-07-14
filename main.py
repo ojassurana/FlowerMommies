@@ -230,7 +230,7 @@ async def register_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 1 and update.message.contact != None:
         await update_info_payload_client(chat_id, "phone_number", update.message.contact.phone_number)
         await update_state_client(chat_id, 3, 2)
-        await bot.send_message(chat_id=update.message.chat_id, text="We kindly request you to provide your name\nIt will help us address you properly and provide a more personalized experience. 😊", reply_markup=ReplyKeyboardRemove())
+        await bot.send_message(chat_id=update.message.chat_id, text="What is your name?", reply_markup=ReplyKeyboardRemove())
     elif client_status['state']['minor'] == 2 and update.message and update.message.text:
         await update_info_payload_client(chat_id, "name", update.message.text)
         await update_state_client(chat_id, 3, 3)

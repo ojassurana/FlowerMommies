@@ -150,7 +150,7 @@ async def send_options_buttons(chat_id, text, options):
     for option in options:
         buttons.append(InlineKeyboardButton(text=option, callback_data=option))
     keyboard = [buttons]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    reply_markup = InlineKeyboardMarkup(keyboard, one_time_keyboard=True)
     await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
 
 

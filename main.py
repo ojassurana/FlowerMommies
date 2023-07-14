@@ -680,7 +680,7 @@ async def echo(request: Request):
                         await update_state_client(chat_id, 3, 1)
                         reply_keyboard = [[KeyboardButton("Share Phone Number 📞", request_contact=True)]]
                         markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-                        await bot.send_message(chat_id, text="Please click the button below to share your 📞 contact details.\nThis will enable us to reach out to you promptly in case of any issues or updates. 📲", reply_markup=markup)
+                        await bot.send_message(chat_id, text="Please click the button below to share your 📞 contact details.", reply_markup=markup)
                     else:
                         await send_text(chat_id, "I am not sure what you mean 😅. Please check the menu section for available commands and interactions. If you need further assistance, simply use the command /contact support to reach our customer support team. They're here to help you! 📞")
                 else:

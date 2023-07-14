@@ -41,19 +41,16 @@ app.add_middleware(
 )
 # Text: ______________________________________________________________________________________________________________
 msg1 = '''
-🌺 Welcome to our Flower Business Bot for Singapore! 🌸 
+🌺 Welcome to Flowermommies Singapore!🌸
 
-🌼 We're here to help you explore the vibrant world of flowers and bring the beauty of nature to your doorstep. 🌿✨✉️💐 Our bot is your go-to assistant for all things floral. From exploring our mesmerizing collection to placing orders, we've got you covered! 🌹💐 
+What this bot does:
+🌼 We're here to help you explore the vibrant world of flowers and bring the beauty of nature to your doorstep. 🌿✨✉️💐 Our bot is your go-to assistant for all things floral, from browsing our mesmerizing collection to placing orders. We've got you covered! 🌹💐
 
-/register: Create an account and unlock access to our exciting features and benefits. 🌟🌸
-
-/purchase: Ready to delight your loved ones? Make their day by selecting and ordering the perfect flower arrangement. 🛍🌺
-
-/Catalog: Dive into a world of colors and fragrances! Browse our catalog to find the stunning flower arrangements that will take your breath away. 🌸🌷✨
-
-/order_history: Keep track of your previous purchases and deliveries. It's a great way to relive the beautiful moments and plan future surprises! 📚💐💌
-
-🌼 So, let's dive into the enchanting world of flowers together! Start exploring our collection and let us help you create moments that bloom forever! 🌷💖🌼
+How to use:
+1. /register: Create an account and unlock access to exciting features and benefits. 🌟🌸
+2. /Catalog: Browse our catalog to find stunning flower arrangements . 🌸🌷✨
+3. /purchase: Ready to delight your loved ones? Make their day by selecting and ordering. 🛍🌺
+4. /order_history: Keep track of your previous purchases and deliveries.🛍🌺
 
 If you have any questions or need assistance, don't hesitate to reach out using the /contact command. Happy shopping! 🌸✨🛍
 '''

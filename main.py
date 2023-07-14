@@ -352,7 +352,7 @@ If, at any point, you wish to cancel the current order, you can use the command 
                 await send_text(chat_id, "Please enter a date that is between tomorrow and 90 days from now.")
             else:
                 await update_info_payload_client(chat_id, "delivery_date", delivery_date)
-                new_date_string = new_date_string.strftime("%d %B %Y")
+                new_date_string = delivery_date.strftime("%d %B %Y")
                 info_payload = client_status['info_payload']
                 product_id_quantity_pairs = []
                 for key in info_payload:

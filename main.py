@@ -320,7 +320,7 @@ If you wish to cancel the current order, use the command /cancel.
             await send_options_buttons(client_status['_id'], "Would you like to proceed to checkout and review your order summary? 🛒✨",["Yes ✅", "No ❌"])
             await update_state_client(chat_id, 1, 3)
         elif text == "Add more 🏵":
-            await send_text(chat_id, "Absolutely! Let's dive into our catalog once again! 🌸✨ Please take a look and find the product that catches your eye. Once you've made your choice, simply enter the corresponding ID! 🛍️😊")
+            await send_text(chat_id, "Please enter the <b>corresponding product ID</b> of what you want to buy: 🛍️😊")
             await update_state_client(chat_id, 1, 0)
         else:
             await send_text(chat_id, "Please enter a valid input. If you want to restart the purchase, use /cancel and then press /purchase again.")

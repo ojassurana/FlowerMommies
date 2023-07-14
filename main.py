@@ -41,18 +41,18 @@ app.add_middleware(
 )
 # Text: ______________________________________________________________________________________________________________
 msg1 = '''
-🌺 Welcome to Flowermommies Singapore!🌸
+🌺 <b>Welcome to Flowermommies Singapore!</b>🌸
 
-What this bot does:
+<b><u>What this bot does:</u></b>
 🌼 We're here to help you explore the vibrant world of flowers and bring the beauty of nature to your doorstep. 🌿✨✉️💐 Our bot is your go-to assistant for all things floral, from browsing our mesmerizing collection to placing orders. We've got you covered! 🌹💐
 
 How to use:
-1. /register: Create an account and unlock access to exciting features and benefits. 🌟🌸
-2. /Catalog: Browse our catalog to find stunning flower arrangements . 🌸🌷✨
-3. /purchase: Ready to delight your loved ones? Make their day by selecting and ordering. 🛍🌺
-4. /order_history: Keep track of your previous purchases and deliveries.🛍🌺
+1. /register: <b>Create an account</b> and unlock access to exciting features and benefits. 🌟🌸
+2. /Catalog: <b>Browse our catalog</b> 🌸🌷✨
+3. /purchase: <b>Selecting and ordering.</b> 🛍🌺
+4. /order_history: <b>View previous purchases and deliveries.</b>🛍🌺
 
-If you have any questions or need assistance, don't hesitate to reach out using the /contact command. Happy shopping! 🌸✨🛍
+If you have any <b>questions or need assistance</b>, don't hesitate to reach out using the /contact command. Happy shopping! 🌸✨🛍
 '''
 msg7 = '''
 We have a wide variety of flowers to choose from. Please note the ID of the flower you want to orderl and use /purchase to buy it.

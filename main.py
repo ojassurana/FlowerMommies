@@ -256,21 +256,22 @@ async def register_handler(chat_id, client_status, update):
 async def purchase_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 0 and update.message and update.message.text:
         id = update.message.text
-        if product.count_documents({"_id": id.upper()}) == 0:
+        id = id.upper()
+        if product.count_documents({"_id": id}) == 0:
             await send_text(chat_id, "It seems that the product ID you <b>entered does not exist</b>\nPlease double-check the ID and try again with a <b>valid product ID from our catalog.</b>")
             return {"status": "ok"}
-        if product.find_one({"_id": id.upper()})['status'] == False:
+        if product.find_one({"_id": id})['status'] == False:
             await send_text(chat_id, "The product you have chosen is currently out of stock. Please choose another product ID instead.")
             return {"status": "ok"}
         info_payload = client_status['info_payload']
         for key in info_payload:
-            if key == id.upper():
+            if key == id:
                 await send_text(chat_id, "Oops! It looks like you have already added that product to your cart. Please provide a different product ID for adding another item. If you need any assistance or have any questions, feel free to ask. Happy shopping! 🛍️😊")
                 await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel. ❌ If you have any further questions or need assistance, feel free to let me know. I'm here to help! 😊")
                 return {"status": "ok"}
         await update_info_payload_client(chat_id, id, 0)
         await update_state_client(chat_id, 1, 1)
-        product_details = product.find_one({"_id": id.upper()})
+        product_details = product.find_one({"_id": id})
         product_name = product_details['name']
         product_description = product_details['description']
         product_price = product_details['price']

@@ -46,7 +46,7 @@ msg1 = '''
 <b><u>What this bot does:</u></b>
 🌼 We're here to help you explore the vibrant world of flowers and bring the beauty of nature to your doorstep. 🌿✨✉️💐 Our bot is your go-to assistant for all things floral, from browsing our mesmerizing collection to placing orders. We've got you covered! 🌹💐
 
-How to use:
+<b><u>How to use:</u></b>
 1. /register: <b>Create an account</b> and unlock access to exciting features and benefits. 🌟🌸
 2. /Catalog: <b>Browse our catalog</b> 🌸🌷✨
 3. /purchase: <b>Selecting and ordering.</b> 🛍🌺

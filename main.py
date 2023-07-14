@@ -687,7 +687,7 @@ async def echo(request: Request):
 <b>Order ID:</b> {order_id}
 <b>Order time:</b> {order_time}
 <b>Products:</b>\n{product_text}
-<b>Order cost:</b>: ${round(order_cost,2)}
+<b>Order cost:</b> ${round(order_cost,2)}
 <b>Order Address:</b> {order_address}
 <b>Delivery Status:</b> {order_status_bool}
 <b>Order Comment:</> {order_comment}

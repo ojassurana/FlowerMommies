@@ -713,10 +713,11 @@ async def echo(request: Request):
                 else:
                     await send_text(chat_id, "Please enter a valid input.")
             elif client_status['state']['major'] == 3:
-                if update.message.text:
-                    if "/contact" == update.message.text:
-                            help_msg = "Please contact @ojasx for customer support/suggestions."
-                            await send_text(chat_id, help_msg)
+                if update.message:
+                    if update.message.text:
+                        if "/contact" == update.message.text:
+                                help_msg = "Please contact @ojasx for customer support/suggestions."
+                                await send_text(chat_id, help_msg)
                 if update.message and update.message.text == "/cancel":
                     await send_text(chat_id, "Your current procedure has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                     await update_state_client(chat_id, 0, 0)
@@ -724,10 +725,11 @@ async def echo(request: Request):
                     return {"status": "ok"}
                 await register_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 1:
-                if update.message.text:
-                    if "/contact" == update.message.text:
-                            help_msg = "Please contact @ojasx for customer support/suggestions."
-                            await send_text(chat_id, help_msg)
+                if update.message:
+                    if update.message.text:
+                        if "/contact" == update.message.text:
+                                help_msg = "Please contact @ojasx for customer support/suggestions."
+                                await send_text(chat_id, help_msg)
                 if update.message and update.message.text == "/cancel":
                     await send_text(chat_id, "Your current order has been cancelled. Please make use of /catalog and then /purchase to purchase your flowers if you have already /register :)")
                     await update_state_client(chat_id, 0, 0)
@@ -735,10 +737,11 @@ async def echo(request: Request):
                     return {"status": "ok"}
                 await purchase_handler(chat_id, client_status, update)
             elif client_status['state']['major'] == 2:
-                if update.message.text:
-                    if "/contact" == update.message.text:
-                            help_msg = "Please contact @ojasx for customer support/suggestions."
-                            await send_text(chat_id, help_msg)
+                if update.message:
+                    if update.message.text:
+                        if "/contact" == update.message.text:
+                                help_msg = "Please contact @ojasx for customer support/suggestions."
+                                await send_text(chat_id, help_msg)
                 if update.message and update.message.text == "/cancel":
                     await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                     return {"status": "ok"}

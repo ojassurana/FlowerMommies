@@ -48,7 +48,7 @@ msg1 = '''
 
 <b><u>How to use:</u></b>
 1. /register: <b>Create an account</b> and unlock access to exciting features and benefits. 🌟🌸
-2. /Catalog: <b>Browse our catalog</b> 🌸🌷✨
+2. /catalog: <b>Browse our catalog</b> 🌸🌷✨
 3. /purchase: <b>Selecting and ordering.</b> 🛍🌺
 4. /order_history: <b>View previous purchases and deliveries.</b>🛍🌺
 

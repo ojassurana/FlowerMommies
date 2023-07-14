@@ -346,13 +346,13 @@ If, at any point, you wish to cancel the current order, you can use the command 
     elif client_status['state']['minor'] == 7 and update.message and update.message.text:
         delivery_date = update.message.text
         try:
-            delivery_date = datetime.strptime(delivery_date, '%d/%m/%Y')
+            delivery_date_object = datetime.strptime(delivery_date, '%d/%m/%Y')
             today = datetime.now()
-            if delivery_date < today + timedelta(days=1) or delivery_date > today + timedelta(days=90):
+            if delivery_date_object < today + timedelta(days=1) or delivery_date_object > today + timedelta(days=90):
                 await send_text(chat_id, "Please enter a date that is between tomorrow and 90 days from now.")
             else:
                 await update_info_payload_client(chat_id, "delivery_date", delivery_date)
-                new_date_string = delivery_date.strftime("%d %B %Y")
+                new_date_string = delivery_date_object.strftime("%d %B %Y")
                 info_payload = client_status['info_payload']
                 product_id_quantity_pairs = []
                 for key in info_payload:

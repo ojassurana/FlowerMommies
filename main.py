@@ -236,7 +236,7 @@ async def register_handler(chat_id, client_status, update):
     elif client_status['state']['minor'] == 2 and update.message and update.message.text:
         await update_info_payload_client(chat_id, "name", update.message.text)
         await update_state_client(chat_id, 3, 3)
-        await send_text(chat_id, "<b>Please provide us with your email address!</b>📧")
+        await send_text(chat_id, "Please provide us with your email address!📧")
     elif client_status['state']['minor'] == 3 and update.message and update.message.text:
         text = update.message.text
         if "@" not in text or "." not in text:

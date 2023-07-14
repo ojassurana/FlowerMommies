@@ -278,6 +278,7 @@ async def purchase_handler(chat_id, client_status, update):
         product_dimensions = product_details['dimensions']
         await send_text(chat_id, f'''
 Great choice! 🌻 Here are the details of the item(s) you have selected:
+                        
 <b>Product ID:</b> {id}
 <b>Name:</b> {product_name}
 <b>Description:</b> {product_description}

@@ -673,7 +673,7 @@ async def echo(request: Request):
                             await send_text(chat_id, "Please register first by using /register command before making a purchase. 😀")
                         else:
                             await bot.send_photo(chat_id=chat_id, photo="https://cdn.discordapp.com/attachments/628770208319930398/1124613491047792670/IMG_20230701_155627_608.jpg", caption="")
-                            await send_text(chat_id, "Certainly! Please take a moment to browse through our catalog. <b>Once you find the product you'd like to purchase, please enter the corresponding ID (e.g A2).</b>\nFeel free to ask for any assistance or further information about a specific product. Happy shopping! 🛍️🌸")
+                            await send_text(chat_id, "<b>Find the product you'd like to purchase, please enter the corresponding ID (e.g A2)</b>")
                             await update_state_client(chat_id, 1, 0)
                             
                     elif "/register" == update.message.text:

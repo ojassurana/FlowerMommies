@@ -23,7 +23,7 @@ TOKEN = "5918110016:AAF8wtmTHc7imMUYVdC_bwyccHlmySsvVbc"
 stripe.api_key = "sk_test_51KrCOaLTObQHYLJ1PmfqCSsYuDxmqDV9sqTEaxNF0dLh7YZqBrA1J49rR7NnZnd7xIeRGPqmkuiuSqXFpDdYLUlY00bilidgOR"
 webhook_secret = "whsec_rSxDn6C2pMp1ALQK8wA4RiOVcS09glK2"
 mongodb_key = 'flower.cer'
-app_script_url = "https://script.google.com/macros/s/AKfycbysMeo-7JIvUiYMSsKoOlCp3ACrToACjYN3yEiCbldGpsM4ZV_B-v2ntVA8sGTI-Wiw/exec"
+app_script_url = "https://script.google.com/macros/s/AKfycbwQLIeboCQYxn4D1kWvXR8CrStHscvFkwkxLu5xD_wDBNuZ9OW8mapOeaiS5BdVdQyt/exec"
 admin_id = -941570588
 crm_id = -908442773
 # Client: ____________________________________________________________________________________________________________
@@ -93,6 +93,7 @@ async def payment_received_script(payment_intent_id, time):
         order_comment = order_id_payload['comment']
         order_amount = order_id_payload['amount']
         order_customer_id = order_id_payload['user_id']
+        order_date = order_id_payload['delivery_date']
         order_text = f'''
 <b>Order ID:</b> {order_id}
 <b>Customer ID:</b> {order_customer_id}
@@ -101,6 +102,7 @@ async def payment_received_script(payment_intent_id, time):
 <b>Order Address:</b> {order_address}
 <b>Order Comment:</b> {order_comment}
 <b>Payment ID:</b> {payment_intent_id}
+<b>Order Date:</b> {order_date} 
         '''
         await send_text(admin_id, order_text)
         clients.update_one({"random_id": order_id_payload['user_id']}, {"$set": {"state.major": 0, "state.minor": 0}})
@@ -393,7 +395,7 @@ If you wish to cancel the current order, use the command /cancel.
             order_payload['products'] = []
             info_payload = client_status['info_payload']
             for key in info_payload:
-                if key not in ["address", "comment"]:
+                if key not in ["address", "comment", "delivery_date"]:
                     order_payload['products'].append({"id": key, "quantity": info_payload[key]})
             total_price = 0
             for pair in order_payload['products']:

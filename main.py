@@ -414,7 +414,7 @@ If you wish to cancel the current order, use the command /cancel.
             order_payload['stripe_payment_id'] = stripe_payment_id
             order_payload['checkout_id'] = checkout_id
             order_payload['delivery_date'] = info_payload['delivery_date']
-            await send_text(chat_id, f"Your order has been placed successfully. Please pay ${total_price} at the following url: <a href='"+stripe_payment_url+"'>Click Here</a>")
+            await send_text(chat_id, f"<b>Congratulations! 🎉 Your order has been placed successfully!</b>\nTo confirm your order, please proceed with the <b>payment of $"+ str(round(total_price, 2)) +" by clicking the following link:</b> <a href='"+stripe_payment_url+"'>Payment Link</a>")
             order.insert_one(order_payload)
             await info_payload_reset_client(chat_id)
             clients.update_one({"_id": chat_id}, {"$push": {"order_history": order_id}})
@@ -745,8 +745,8 @@ async def echo(request: Request):
                         order_payload = order.find_one({"_id": order_id})
                         if order_payload['paid'] == False:
                             stripe_payment_link = order_payload['stripe_payment_link']
-                            await send_text(chat_id, f"Congratulations! 🎉 Your order has been placed successfully! To confirm your order, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
-                            await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
+                            await send_text(chat_id, f"To confirm your order first, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
+                            await send_text(chat_id, "To cancel your order, use the command /delete_order.\nFor personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                             return {"status": "ok"}
         return {"status": "ok"}
     except Exception as e:

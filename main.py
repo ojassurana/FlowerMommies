@@ -413,7 +413,7 @@ If you wish to cancel the current order, use the command /cancel.
             order_payload['stripe_payment_link'] = stripe_payment_url
             order_payload['stripe_payment_id'] = stripe_payment_id
             order_payload['checkout_id'] = checkout_id
-            order_payload['delivery_date'] = delivery_date
+            order_payload['delivery_date'] = info_payload['delivery_date']
             await send_text(chat_id, f"Your order has been placed successfully. Please pay ${total_price} at the following url: <a href='"+stripe_payment_url+"'>Click Here</a>")
             order.insert_one(order_payload)
             await info_payload_reset_client(chat_id)

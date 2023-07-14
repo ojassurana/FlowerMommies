@@ -219,14 +219,6 @@ async def update_admin_info_from_payload(chat_id, info_payload):
         admin.update_one({"_id": chat_id}, {"$set": {str(key): info_payload[key]}})
 
 
-async def send_options_buttons(chat_id, text, options):
-    buttons = []
-    for option in options:
-        buttons.append(InlineKeyboardButton(text=option, callback_data=option))
-    keyboard = [buttons]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
-
 
 async def register_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 1 and update.message.contact != None:

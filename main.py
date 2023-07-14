@@ -239,6 +239,9 @@ async def register_handler(chat_id, client_status, update):
         await send_text(chat_id, "<b>Please provide us with your email address!</b>📧")
     elif client_status['state']['minor'] == 3 and update.message and update.message.text:
         text = update.message.text
+        if "@" not in text or "." not in text:
+            await send_text(chat_id, "Please enter a valid email address.")
+            return {"status": "ok"}
         await update_info_payload_client(chat_id, "email", text)
         info_payload = clients.find_one({'_id': chat_id})['info_payload']
         await update_client_info_from_payload(chat_id, info_payload)
@@ -253,21 +256,21 @@ async def register_handler(chat_id, client_status, update):
 async def purchase_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 0 and update.message and update.message.text:
         id = update.message.text
-        if product.count_documents({"_id": id}) == 0:
+        if product.count_documents({"_id": id.upper()}) == 0:
             await send_text(chat_id, "It seems that the product ID you <b>entered does not exist</b>\nPlease double-check the ID and try again with a <b>valid product ID from our catalog.</b>")
             return {"status": "ok"}
-        if product.find_one({"_id": id})['status'] == False:
+        if product.find_one({"_id": id.upper()})['status'] == False:
             await send_text(chat_id, "The product you have chosen is currently out of stock. Please choose another product ID instead.")
             return {"status": "ok"}
         info_payload = client_status['info_payload']
         for key in info_payload:
-            if key == id:
+            if key == id.upper():
                 await send_text(chat_id, "Oops! It looks like you have already added that product to your cart. Please provide a different product ID for adding another item. If you need any assistance or have any questions, feel free to ask. Happy shopping! 🛍️😊")
                 await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel. ❌ If you have any further questions or need assistance, feel free to let me know. I'm here to help! 😊")
                 return {"status": "ok"}
         await update_info_payload_client(chat_id, id, 0)
         await update_state_client(chat_id, 1, 1)
-        product_details = product.find_one({"_id": id})
+        product_details = product.find_one({"_id": id.upper()})
         product_name = product_details['name']
         product_description = product_details['description']
         product_price = product_details['price']
@@ -351,7 +354,10 @@ If you wish to cancel the current order, use the command /cancel.
             delivery_date_object = datetime.strptime(delivery_date, '%d/%m/%Y')
             today = datetime.now()
             if delivery_date_object < today + timedelta(days=1) or delivery_date_object > today + timedelta(days=90):
-                await send_text(chat_id, "Please enter a date that is between tomorrow and 90 days from now.")
+                date_str_90 = (today + timedelta(days=90)).strftime("%d/%m/%Y")
+                date_str_tomorrow = (today + timedelta(days=1)).strftime("%d/%m/%Y")
+                await send_text(chat_id, f"Please enter a date that is between <b>{date_str_tomorrow}</b> and <b>{date_str_90}</b>.")
+
             else:
                 await update_info_payload_client(chat_id, "delivery_date", delivery_date)
                 new_date_string = delivery_date_object.strftime("%d %B %Y")

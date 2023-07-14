@@ -230,11 +230,11 @@ async def register_handler(chat_id, client_status, update):
     if client_status['state']['minor'] == 1 and update.message.contact != None:
         await update_info_payload_client(chat_id, "phone_number", update.message.contact.phone_number)
         await update_state_client(chat_id, 3, 2)
-        await bot.send_message(chat_id=update.message.chat_id, text="What is your name?", reply_markup=ReplyKeyboardRemove())
+        await bot.send_message(chat_id=update.message.chat_id, text="Please provide your name 😁?", reply_markup=ReplyKeyboardRemove())
     elif client_status['state']['minor'] == 2 and update.message and update.message.text:
         await update_info_payload_client(chat_id, "name", update.message.text)
         await update_state_client(chat_id, 3, 3)
-        await send_text(chat_id, "<b>Please provide us with your email address.</b>\nThis will allow us to communicate with you effectively and keep you updated. Thank you! 📧")
+        await send_text(chat_id, "<b>Please provide us with your email address! 📧")
     elif client_status['state']['minor'] == 3 and update.message and update.message.text:
         text = update.message.text
         await update_info_payload_client(chat_id, "email", text)
@@ -242,7 +242,7 @@ async def register_handler(chat_id, client_status, update):
         await update_client_info_from_payload(chat_id, info_payload)
         await info_payload_reset_client(chat_id)
         await update_state_client(client_status['_id'], 0, 0)
-        await send_text(chat_id, "Congratulations! 🎉 You have been successfully registered. Now, you can use the command /purchase to proceed with placing your order. In case any of the details you entered are incorrect, feel free to use the command /register again to update them. We're here to ensure your information is accurate and provide you with a seamless experience! 😉")
+        await send_text(chat_id, "Congratulations! 🎉 You have been successfully registered\n\nNow, you can use the command /purchase to <b>proceed with placing your order.</b>\n\nIn case any of the details you entered are incorrect, use the command /register again to update them. 😁")
         send_appscript_request({"method": "register", "random_id": client_status["random_id"], "phone_number": info_payload['phone_number'], "email": text, "name": info_payload['name'], "chat_id": chat_id})
     else:
         await send_text(chat_id, "Please enter a valid input. If you want to restart, use /cancel and then press /register again.")
@@ -680,7 +680,7 @@ async def echo(request: Request):
                         await update_state_client(chat_id, 3, 1)
                         reply_keyboard = [[KeyboardButton("Share Phone Number 📞", request_contact=True)]]
                         markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-                        await bot.send_message(chat_id, text="Please click the button below to share your 📞 contact details.", reply_markup=markup)
+                        await bot.send_message(chat_id, text="Please click the button below to share your 📞 contact details", reply_markup=markup)
                     else:
                         await send_text(chat_id, "I am not sure what you mean 😅. Please check the menu section for available commands and interactions. If you need further assistance, simply use the command /contact support to reach our customer support team. They're here to help you! 📞")
                 else:

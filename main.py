@@ -361,7 +361,7 @@ If, at any point, you wish to cancel the current order, you can use the command 
                 cart_text = cart_summary(product_id_quantity_pairs)
                 await send_text(chat_id, cart_text)
                 await send_text(chat_id, f"Thank you for providing the delivery address. Your order will be delivered to: <b>{info_payload['address']}</b> on \n<b>{new_date_string}</b>\nIf you have any additional comments or questions, please use /contact. We're here to assist you! 🚚🌸")
-                await send_text(chat_id, f"Your comment for the order is: {comment}")
+                await send_text(chat_id, f"Your comment for the order is: {info_payload['comment']}")
                 await send_options_buttons(client_status['_id'], "Are you ready to confirm your order? 😊🛍️\nPlease let me know if you're all set to proceed with your purchase. ✅",["Yes ✅", "No ❌"])
                 await update_state_client(chat_id, 1, 6)
         except ValueError:

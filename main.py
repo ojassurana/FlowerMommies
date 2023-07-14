@@ -735,8 +735,9 @@ async def echo(request: Request):
                         if "/contact" == update.message.text:
                                 help_msg = "Please contact @ojasx for customer support/suggestions."
                                 await send_text(chat_id, help_msg)
+                                return {"status": "ok"}
                 if update.message and update.message.text == "/cancel":
-                    await send_text(chat_id, "To cancel your order, use the command /delete_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
+                    await send_text(chat_id, "To cancel your order, use the command /cancel_order. For personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                     return {"status": "ok"}
                 elif update.message and update.message.text == "/cancel_order":
                     order_history = client_status['order_history']
@@ -761,7 +762,7 @@ async def echo(request: Request):
                         if order_payload['paid'] == False:
                             stripe_payment_link = order_payload['stripe_payment_link']
                             await send_text(chat_id, f"To confirm your order first, please proceed with payment by clicking the following link: <a href='"+stripe_payment_link+"'>Payment Link</a>")
-                            await send_text(chat_id, "To cancel your order, use the command /delete_order.\nFor personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
+                            await send_text(chat_id, "To cancel your order, use the command /cancel_order.\nFor personalized assistance, feel free to reach out to us directly using the command /contact. We're here to help! 🌼📞")
                             return {"status": "ok"}
         return {"status": "ok"}
     except Exception as e:

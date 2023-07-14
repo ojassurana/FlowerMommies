@@ -751,7 +751,7 @@ async def echo(request: Request):
                             except:
                                 print('Fuck it')
                             clients.update_one({"_id": chat_id}, {"$pull": {"order_history": order_id}})
-                            await send_text(chat_id, "Your order has been deleted successfully.")
+                            await send_text(chat_id, "Your order has been deleted successfully.\nKindly, make use of /purchase to make a new order :)")
                             await update_state_client(chat_id, 0, 0)
                             return {"status": "ok"}
                 elif update.message and update.message.text:

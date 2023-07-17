@@ -122,7 +122,7 @@ async def payment_received_script(payment_intent_id, time):
 def stripe_payment_link_generator(order_id, total_price):
     try:
         session = stripe.checkout.Session.create(
-            payment_method_types=['paynow'], # You need to replace 'card' with the identifier for PayNow
+            payment_method_types=['paynow'],
             line_items=[{
                 'price_data': {
                     'currency': 'sgd',
@@ -301,7 +301,7 @@ If you wish to cancel the current order, use the command /cancel.
         await send_text(chat_id, cart_text)
         await send_options_buttons(client_status['_id'], "Would you like to add more items to your cart or proceed to checkout? 🛒",["Checkout 🛒", "Add more 🏵"])
         await update_state_client(chat_id, 1, 2)
-        await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel. Let me know how you would like to proceed. 😊")
+        await send_text(chat_id, "If you wish to cancel the current order, simply use the command /cancel.😊")
     elif client_status['state']['minor'] == 2 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
         if text == "Checkout 🛒":
@@ -326,7 +326,7 @@ If you wish to cancel the current order, use the command /cancel.
     elif client_status['state']['minor'] == 3 and update.callback_query and update.callback_query.data:
         text = update.callback_query.data
         if text == "Yes ✅":
-            await send_text(chat_id, "Sure! Please provide your order delivery address so we can ensure your flowers reach the right destination. 🚚🌸")
+            await send_text(chat_id, "Please provide your order delivery address 🚚")
             await update_state_client(chat_id, 1, 4)
         elif text == "No ❌":
             await info_payload_reset_client(chat_id)
@@ -335,7 +335,7 @@ If you wish to cancel the current order, use the command /cancel.
     elif client_status['state']['minor'] == 4 and update.message and update.message.text:
         address = update.message.text
         await update_info_payload_client(chat_id, "address", address)
-        await send_text(chat_id, "Please feel free to enter any comments or special instructions you have for your order. We want to make sure we meet your preferences and requirements. 📝✨")
+        await send_text(chat_id, "Please enter comments or special instructions you have for your order 📝")
         await update_state_client(chat_id, 1, 5)
     elif client_status['state']['minor'] == 5 and update.message and update.message.text:
         comment = update.message.text
